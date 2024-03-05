@@ -1,9 +1,16 @@
 import { exists, join } from "./deps.ts";
-import { getFileNameFromPath } from "./utils.ts";
 interface DecompressOptions {
   overwrite?: boolean;
   includeFileName?: boolean;
 }
+/**
+ * Decompresses a zip file.
+ * @param filePath - The path to the zip file.
+ * @param destinationPath - The path where the extracted files will be placed. Defaults to "./" if not provided.
+ * @param options - Optional decompression options.
+ * @returns A promise that resolves to the path of the extracted files, or `false` if the decompression process failed.
+ * @throws Throws an error if the zip file does not exist.
+ */
 export const decompress = async (
   filePath: string,
   destinationPath: string | null = "./",
@@ -30,31 +37,33 @@ export const decompress = async (
     ? fullDestinationPath
     : false;
 };
+
 const decompressProcess = async (
   zipSourcePath: string,
   destinationPath: string,
   options?: DecompressOptions,
 ): Promise<boolean> => {
-  const unzipCommandProcess = Deno.run({
-    cmd: Deno.build.os === "windows"
-      ? [
-        "PowerShell",
-        "Expand-Archive",
-        "-Path",
-        `"${zipSourcePath}"`,
-        "-DestinationPath",
-        `"${destinationPath}"`,
-        options?.overwrite ? "-Force" : "",
-      ]
-      : [
-        "unzip",
-        options?.overwrite ? "-o" : "",
-        zipSourcePath,
-        "-d",
-        destinationPath,
-      ],
+  const cmd = Deno.build.os === "windows" ? "PowerShell" : "unzip";
+  const args = Deno.build.os === "windows"
+    ? [
+      "Expand-Archive",
+      "-Path",
+      `"${zipSourcePath}"`,
+      "-DestinationPath",
+      `"${destinationPath}"`,
+      options?.overwrite ? "-Force" : "",
+    ]
+    : [options?.overwrite ? "-o" : "", zipSourcePath, "-d", destinationPath];
+  const p = new Deno.Command(cmd, {
+    args: args,
+    stderr: "piped",
+    stdout: "piped",
   });
-  const processStatus = (await unzipCommandProcess.status()).success;
-  Deno.close(unzipCommandProcess.rid);
+  const child = p.spawn();
+  const processStatus = (await child.status).success;
   return processStatus;
 };
+
+function getFileNameFromPath(filePath: string): string {
+  return filePath.split("/").at(-1)?.split(".").slice(0, -1).join(".") || "";
+}

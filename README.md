@@ -1,5 +1,7 @@
 # Deno Zip archive
 
+Forked from (https://github.com/moncefplastin07/deno-zip) !Compatible with jsr
+
 Streaming cross-platform zip tool written for Deno 🦕.
 
 ### the module require permision below
@@ -10,18 +12,20 @@ Streaming cross-platform zip tool written for Deno 🦕.
 
 ### import the module in your deno app
 
-```js
-import {
-  compress,
-  decompress
-} from "https://deno.land/x/zip@v1.2.5/mod.ts";
+```
+deno add @fakoua/zip-ts
 ```
 
+```js
+import { compress, decompress } from "@fakoua/zip-ts";
+```
 
 #### Usage:
+
 ### Compressing
-Compress files and folders to zip file with ``compress`` method
-addin: v1.2.0
+
+Compress files and folders to zip file with `compress` method addin: v1.2.0
+
 ```js
 interface CompressOptions {
   overwrite?: boolean;
@@ -31,24 +35,30 @@ compress(files:string | string[],
   options?: CompressOptions):Promise<boolean>
 decompress(filePath:string, [destinationPath]:string = './', options:{}): Promise<string | false>
 ```
+
 **`arguments`**
 
 - **files**: (string) of one file or more or array of folders and files paths
-- **archiveName**: (string) string of name and destination path of zip file (Where
-  do you want the get compressed zip file) by default is './archive.zip' (current working
-  directory (CWD))
+- **archiveName**: (string) string of name and destination path of zip file
+  (Where do you want the get compressed zip file) by default is './archive.zip'
+  (current working directory (CWD))
 - **options**: object of compressing options
--   **overwrite**: boolean
-- 
+- **overwrite**: boolean
+-
+
 ### Examples:
 
 ```js
 // unZip From File
 console.log(await compress("./myfiles")); //=> boolean
 console.log(await compress("./mypicter.png", "new-dir/mypicter.zip")); //=> boolean
-console.log(await compress(["./mypicters", "./textpalne.txt"], "compressed.zip", {overwrite:true})); //=> boolean
-
+console.log(
+  await compress(["./mypicters", "./textpalne.txt"], "compressed.zip", {
+    overwrite: true,
+  }),
+); //=> boolean
 ```
+
 ### Decompressing
 
 ```js
@@ -82,7 +92,6 @@ console.log(
     includeFileName: true,
   }),
 ); //=> new-dir\myfile
-
 ```
 
 ## Contribute with us from [`Here`](https://github.com/moncefplastin07/deno-zip)
