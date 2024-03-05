@@ -55,7 +55,7 @@ console.log(await compress("./mypicter.png", "new-dir/mypicter.zip")); //=> bool
 console.log(
   await compress(["./mypicters", "./textpalne.txt"], "compressed.zip", {
     overwrite: true,
-  }),
+  })
 ); //=> boolean
 ```
 
@@ -85,13 +85,11 @@ console.log(await decompress("myfile.zip", "new-dir")); //=> new-dir
 console.log(
   await decompress("myfile.zip", null, {
     includeFileName: true,
-  }),
+  })
 ); //=> myfile
 console.log(
   await decompress("myfile.zip", "new-dir", {
     includeFileName: true,
-  }),
+  })
 ); //=> new-dir\myfile
 ```
-
-## Contribute with us from [`Here`](https://github.com/moncefplastin07/deno-zip)

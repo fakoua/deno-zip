@@ -1,6 +1,6 @@
 {
   "name": "@fakoua/zip-ts",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "exports": "./mod.ts",
   "imports": {
     "@std/path": "jsr:@std/path@0.218.2",
