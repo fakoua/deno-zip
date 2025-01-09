@@ -46,6 +46,10 @@ const decompressProcess = async (
   const cmd = Deno.build.os === "windows" ? "PowerShell" : "unzip";
   const args = Deno.build.os === "windows"
     ? [
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "RemoteSigned",
+      "-Command", // Make sure the Expand-Archive module can be loaded from script. See more: https://stackoverflow.com/a/79340490/3416774
       "Expand-Archive",
       "-Path",
       `"${zipSourcePath}"`,
